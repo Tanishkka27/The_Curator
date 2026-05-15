@@ -95,8 +95,6 @@ Open each of these four files and find this line at the top:
 const UNSPLASH_KEY = "YOUR_UNSPLASH_ACCESS_KEY";
 ```
 
-Replace `YOUR_UNSPLASH_ACCESS_KEY` with the key you copied. You need to do this in:
-
 - `PermanentCollection.jsx`
 - `TrendingCollections.jsx`
 - `FeaturedArtists.jsx`
@@ -105,8 +103,6 @@ Replace `YOUR_UNSPLASH_ACCESS_KEY` with the key you copied. You need to do this 
 ### Step 3 — Done
 
 Save and refresh. Images will now load from Unsplash automatically.
-
-> **Note:** The free Unsplash plan allows 50 requests per hour, which is more than enough for development and demo use.
 
 ---
 
@@ -168,4 +164,3 @@ No CSS variables needed — it's all just conditional Tailwind classes.
 ---
 
 *Built for WAP Capstone Project*
->>>>>>> d10fbcb (API Fetched successfully)
