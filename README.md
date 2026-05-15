@@ -1,4 +1,3 @@
-
 # The Curator
 
 A high-end gallery and portfolio platform for photographers, designers, and illustrators who take their craft seriously.
