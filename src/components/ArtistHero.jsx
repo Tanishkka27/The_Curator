@@ -4,9 +4,9 @@ const UNSPLASH_KEY = "0tYUshO3KokmKsm_pmu1SW5-U9A-H7N8Z9kEI0kT2eI";
 
 const stats = [
   { label: "Curated Pieces", value: "1,280" },
-  { label: "Exhibitions",    value: "14"    },
-  { label: "Years Active",   value: "18"    },
-  { label: "Collections",    value: "03"    },
+  { label: "Exhibitions", value: "14" },
+  { label: "Years Active", value: "18" },
+  { label: "Collections", value: "03" },
 ];
 
 
@@ -20,7 +20,6 @@ function PortraitColumn({ imageUrl, dark }) {
 
   return (
     <div className="relative w-[42%] flex-shrink-0 min-h-[640px]">
-      {/* Show real image if loaded, grey placeholder otherwise */}
       {imageUrl ? (
         <img
           src={imageUrl}
@@ -31,7 +30,7 @@ function PortraitColumn({ imageUrl, dark }) {
         <div className="w-full h-full bg-[#8a8a88] animate-pulse" />
       )}
 
-      {/* Badge overlaps the bottom edge of the portrait */}
+
       <div className={badgeClass}>
         <p className="text-[10px] tracking-[0.25em] uppercase text-[#f0ede6]/50 mb-1.5">
           Legacy Status
@@ -45,9 +44,7 @@ function PortraitColumn({ imageUrl, dark }) {
 }
 
 
-// -----------------------------------------------------------
-// One stat block
-// -----------------------------------------------------------
+
 function StatItem({ stat, dark }) {
   let labelClass = "text-[9px] tracking-[0.18em] uppercase mb-2 ";
   if (dark) {
@@ -65,10 +62,7 @@ function StatItem({ stat, dark }) {
 }
 
 
-// -----------------------------------------------------------
-// Right column — role, name, bio, stats, buttons
-// (no API needed here — all text is static)
-// -----------------------------------------------------------
+
 function InfoColumn({ dark }) {
   let ruleBg = "w-8 h-px ";
   if (dark) {
@@ -153,17 +147,13 @@ function InfoColumn({ dark }) {
 }
 
 
-// -----------------------------------------------------------
-// Full hero — fetches one big portrait photo for the left side
-// -----------------------------------------------------------
+
 export default function ArtistHero({ dark }) {
-  // We just need one image URL for the portrait
   const [portraitUrl, setPortraitUrl] = useState("");
   const [error, setError] = useState("");
 
   useEffect(function () {
     async function fetchHeroPhoto() {
-      // One photo of a person in a creative/studio setting
       const url = "https://api.unsplash.com/photos/random?query=creative+director+studio&count=1&client_id=" + UNSPLASH_KEY;
 
       const response = await fetch(url);
@@ -175,7 +165,6 @@ export default function ArtistHero({ dark }) {
 
       const data = await response.json();
 
-      // When count=1, Unsplash returns an array with one item
       if (data[0]) {
         setPortraitUrl(data[0].urls.regular);
       }

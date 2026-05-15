@@ -4,14 +4,12 @@ function TabButton({ tab, active, setActive, dark }) {
   let btnClass = "text-[11px] tracking-[0.18em] uppercase font-medium pb-2 transition-all ";
 
   if (active === tab) {
-    // This tab is selected — show the underline indicator
     if (dark) {
       btnClass += "text-[#c9a227] border-b-2 border-[#c9a227]";
     } else {
       btnClass += "text-[#1a1a1a] border-b-2 border-[#1a1a1a]";
     }
   } else {
-    // Not selected — dimmed, brightens slightly on hover
     if (dark) {
       btnClass += "text-[#f0ede6]/50 hover:text-[#f0ede6]/80";
     } else {

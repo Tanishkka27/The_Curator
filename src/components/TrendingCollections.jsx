@@ -3,14 +3,13 @@ import { useState, useEffect } from "react";
 const UNSPLASH_KEY = "0tYUshO3KokmKsm_pmu1SW5-U9A-H7N8Z9kEI0kT2eI";
 
 const collections = [
-  { id: 1, title: "Linear Geometry", count: 24, curator: "A. Rossi",      bg: "bg-[#c8bfb0]" },
-  { id: 2, title: "Tactile Earth",   count: 18, curator: "Studio O",      bg: "bg-[#7a5a30]" },
-  { id: 3, title: "Chromotherapy",   count: 32, curator: "The Curator",   bg: "bg-[#c0b8b0]" },
+  { id: 1, title: "Linear Geometry", count: 24, curator: "A. Rossi", bg: "bg-[#c8bfb0]" },
+  { id: 2, title: "Tactile Earth", count: 18, curator: "Studio O", bg: "bg-[#7a5a30]" },
+  { id: 3, title: "Chromotherapy", count: 32, curator: "The Curator", bg: "bg-[#c0b8b0]" },
 ];
 
 
 function CollectionCard({ col, index, dark }) {
-  // Middle card is pushed down slightly for the staggered look
   let wrapperClass = "";
   if (index === 1) {
     wrapperClass = "mt-8";
@@ -25,7 +24,6 @@ function CollectionCard({ col, index, dark }) {
 
   return (
     <div className={wrapperClass}>
-      {/* Image block — shows real photo if URL is ready, shimmer otherwise */}
       <div className={`w-full h-[460px] overflow-hidden group cursor-pointer ${col.bg}`}>
         {col.imageUrl ? (
           <img
@@ -38,7 +36,6 @@ function CollectionCard({ col, index, dark }) {
         )}
       </div>
 
-      {/* Title and meta below the card */}
       <div className="mt-4">
         <h3 className="font-serif text-2xl font-bold mb-1">{col.title}</h3>
         <p className={metaClass}>
@@ -51,14 +48,11 @@ function CollectionCard({ col, index, dark }) {
 
 
 export default function TrendingCollections({ dark }) {
-  // This holds our collections array once images are attached
   const [items, setItems] = useState(collections);
   const [error, setError] = useState("");
 
-  // Fetch 3 images when the component first loads
   useEffect(function () {
     async function fetchCovers() {
-      // "editorial" gives us clean, gallery-style photos
       const url = "https://api.unsplash.com/photos/random?query=fine+art+editorial&count=3&client_id=" + UNSPLASH_KEY;
 
       const response = await fetch(url);
@@ -70,7 +64,6 @@ export default function TrendingCollections({ dark }) {
 
       const data = await response.json();
 
-      // Attach one image to each collection card
       const updated = items.map(function (col, index) {
         const updatedCol = {};
         updatedCol.id = col.id;
@@ -90,10 +83,9 @@ export default function TrendingCollections({ dark }) {
     }
 
     fetchCovers();
-  }, []); // empty [] = run once on mount
+  }, []);
 
 
-  // Section styling
   let sectionClass = "px-10 py-16 transition-colors duration-300 ";
   if (dark) {
     sectionClass += "bg-[#0c3028] text-[#f0ede6]";
@@ -118,7 +110,6 @@ export default function TrendingCollections({ dark }) {
   return (
     <section className={sectionClass}>
 
-      {/* ---- Header row ---- */}
       <div className="flex items-end justify-between mb-10">
         <div>
           <p className={eyebrowClass}>Curated Selections</p>
@@ -127,12 +118,10 @@ export default function TrendingCollections({ dark }) {
         <button className={viewAllClass}>View All</button>
       </div>
 
-      {/* Error fallback */}
       {error ? (
         <p className="text-center text-red-400 mb-8">{error}</p>
       ) : null}
 
-      {/* ---- 3-column staggered grid ---- */}
       <div className="grid grid-cols-3 gap-6 items-start">
         {items.map(function (col, i) {
           return (
