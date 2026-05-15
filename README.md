@@ -37,7 +37,6 @@ It has a light mode and a dark mode, a filterable masonry grid, trending collect
 | Images     | Unsplash API         |
 | Deployment | Vercel / Netlify     |
 
-No extra libraries. No Redux. No routing. Just React + Tailwind + Fetch API.
 
 ---
 
