@@ -38,30 +38,6 @@ It has a light mode and a dark mode, a filterable masonry grid, trending collect
 
 ---
 
-## Folder Structure
-
-```
->>>>>>> d10fbcb (API Fetched successfully)
-the-curator/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx              # Logo + dark mode toggle
-│   │   ├── Hero.jsx                # Top headline section
-│   │   ├── FilterTabs.jsx          # All / Photography / Design / Illustration
-│   │   ├── PermanentCollection.jsx # Masonry grid — fetches 16 images
-│   │   ├── TrendingCollections.jsx # 3-col cards — fetches 3 cover images
-│   │   ├── FeaturedArtists.jsx     # Artist cards — fetches 2 portrait photos
-│   │   └── ArtistHero.jsx          # Big profile section — fetches 1 hero photo
-│   ├── App.jsx                     # Root — holds dark mode state, renders all sections
-│   └── main.jsx                    # Entry point
-├── package.json
-└── README.md
-```
-
----
-
 ## How to Run
 
 ```bash
