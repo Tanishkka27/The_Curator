@@ -33,8 +33,6 @@ It has a light mode and a dark mode, a filterable masonry grid, trending collect
 | Framework  | React (Vite)         |
 | Styling    | Tailwind CSS         |
 | Icons      | Lucide React         |
-| Fonts      | Serif + system       |
-| Images     | Unsplash API         |
 | Deployment | Vercel / Netlify     |
 
 
@@ -89,22 +87,6 @@ The app pulls all photos from [Unsplash](https://unsplash.com/developers), which
 
 ### Step 2 — Add it to the components
 
-Open each of these four files and find this line at the top:
-
-```js
-const UNSPLASH_KEY = "YOUR_UNSPLASH_ACCESS_KEY";
-```
-
-- `PermanentCollection.jsx`
-- `TrendingCollections.jsx`
-- `FeaturedArtists.jsx`
-- `ArtistHero.jsx`
-
-### Step 3 — Done
-
-Save and refresh. Images will now load from Unsplash automatically.
-
----
 
 ## How the Image Fetching Works (Simple Explanation)
 
