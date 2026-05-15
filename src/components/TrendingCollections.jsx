@@ -1,146 +1,111 @@
 import { useState, useEffect } from "react";
 
-const UNSPLASH_KEY = "0tYUshO3KokmKsm_pmu1SW5-U9A-H7N8Z9kEI0kT2eI";
+const API_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
 
-const collections = [
-  { id: 1, title: "Linear Geometry", count: 24, curator: "A. Rossi",      bg: "bg-[#c8bfb0]" },
-  { id: 2, title: "Tactile Earth",   count: 18, curator: "Studio O",      bg: "bg-[#7a5a30]" },
-  { id: 3, title: "Chromotherapy",   count: 32, curator: "The Curator",   bg: "bg-[#c0b8b0]" },
-];
-
-
-function CollectionCard({ col, index, dark }) {
-  // Middle card is pushed down slightly for the staggered look
-  let wrapperClass = "";
-  if (index === 1) {
-    wrapperClass = "mt-8";
-  }
-
-  let metaClass = "text-[10px] tracking-[0.15em] uppercase ";
-  if (dark) {
-    metaClass += "text-[#f0ede6]/50";
-  } else {
-    metaClass += "text-[#1a1a1a]/50";
-  }
+function CollectionCard({ item, index, isDark }) {
+  const isStaggered = index === 1;
+  const textColor = isDark ? "text-[#f0ede6]/50" : "text-[#1a1a1a]/50";
 
   return (
-    <div className={wrapperClass}>
-      {/* Image block — shows real photo if URL is ready, shimmer otherwise */}
-      <div className={`w-full h-[460px] overflow-hidden group cursor-pointer ${col.bg}`}>
-        {col.imageUrl ? (
+    <div className={isStaggered ? "mt-8" : ""}>
+      <div className="w-full h-[460px] overflow-hidden group cursor-pointer bg-[#e5e5e5]">
+        {item.imageUrl ? (
           <img
-            src={col.imageUrl}
-            alt={col.title}
+            src={item.imageUrl}
+            alt={item.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className={`w-full h-full animate-pulse ${col.bg}`} />
+          <div className="w-full h-full animate-pulse bg-gray-300" />
         )}
       </div>
 
-      {/* Title and meta below the card */}
       <div className="mt-4">
-        <h3 className="font-serif text-2xl font-bold mb-1">{col.title}</h3>
-        <p className={metaClass}>
-          {col.count} Artworks &bull; Curated by {col.curator}
+        {/* We use a fallback title if the photo has no description */}
+        <h3 className="font-serif text-2xl font-bold mb-1 capitalize">
+          {item.title || "Untitled Perspective"}
+        </h3>
+        <p className={`text-[10px] tracking-[0.15em] uppercase ${textColor}`}>
+          Art No. {item.id} &bull; Photo by {item.curator}
         </p>
       </div>
     </div>
   );
 }
 
-
 export default function TrendingCollections({ dark }) {
-  // This holds our collections array once images are attached
-  const [items, setItems] = useState(collections);
-  const [error, setError] = useState("");
+  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch 3 images when the component first loads
-  useEffect(function () {
-    async function fetchCovers() {
-      // "editorial" gives us clean, gallery-style photos
-      const url = "https://api.unsplash.com/photos/random?query=fine+art+editorial&count=3&client_id=" + UNSPLASH_KEY;
+  useEffect(() => {
+    const fetchFreshContent = async () => {
+      try {
+        const response = await fetch(
+          `https://api.unsplash.com/photos/random?query=minimalist+architecture&count=3&client_id=${API_KEY}`
+        );
 
-      const response = await fetch(url);
+        if (!response.ok) throw new Error("Connection issues");
 
-      if (response.ok === false) {
-        setError("Could not load collection covers. Check your Unsplash API key.");
-        return;
+        const data = await response.json();
+
+        // Create the collection objects directly from the API results
+        const dynamicContent = data.map((photo) => ({
+          id: photo.id.slice(0, 4), // Use part of the Unsplash ID
+          title: photo.alt_description || photo.description,
+          curator: photo.user.name,
+          imageUrl: photo.urls.regular,
+        }));
+
+        setCollections(dynamicContent);
+      } catch {
+        console.warn("Unsplash API rate limit reached. Using fallback images.");
+        setCollections([
+          { id: "1001", title: "Brutalist Silence", curator: "Julian Vane", imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop" },
+          { id: "1002", title: "Urban Shadows", curator: "Elena Vosc", imageUrl: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=800&auto=format&fit=crop" },
+          { id: "1003", title: "Concrete Layers", curator: "Mark Thorne", imageUrl: "https://images.unsplash.com/photo-1506526190800-47b15d65ea74?q=80&w=800&auto=format&fit=crop" }
+        ]);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const data = await response.json();
+    fetchFreshContent();
+  }, []);
 
-      // Attach one image to each collection card
-      const updated = items.map(function (col, index) {
-        const updatedCol = {};
-        updatedCol.id = col.id;
-        updatedCol.title = col.title;
-        updatedCol.count = col.count;
-        updatedCol.curator = col.curator;
-        updatedCol.bg = col.bg;
-
-        if (data[index]) {
-          updatedCol.imageUrl = data[index].urls.regular;
-        }
-
-        return updatedCol;
-      });
-
-      setItems(updated);
-    }
-
-    fetchCovers();
-  }, []); // empty [] = run once on mount
-
-
-  // Section styling
-  let sectionClass = "px-10 py-16 transition-colors duration-300 ";
-  if (dark) {
-    sectionClass += "bg-[#0c3028] text-[#f0ede6]";
-  } else {
-    sectionClass += "bg-[#f0ede8] text-[#1a1a1a]";
-  }
-
-  let eyebrowClass = "text-[10px] tracking-[0.2em] uppercase mb-2 ";
-  if (dark) {
-    eyebrowClass += "text-[#c9a227]";
-  } else {
-    eyebrowClass += "text-[#1a1a1a]/50";
-  }
-
-  let viewAllClass = "text-[11px] tracking-[0.2em] uppercase font-medium border-b pb-0.5 transition-opacity hover:opacity-60 ";
-  if (dark) {
-    viewAllClass += "border-[#f0ede6]";
-  } else {
-    viewAllClass += "border-[#1a1a1a]";
-  }
+  const theme = {
+    section: dark ? "bg-[#0c3028] text-[#f0ede6]" : "bg-[#f0ede8] text-[#1a1a1a]",
+    eyebrow: dark ? "text-[#c9a227]" : "text-[#1a1a1a]/50",
+    button: dark ? "border-[#f0ede6]" : "border-[#1a1a1a]"
+  };
 
   return (
-    <section className={sectionClass}>
-
-      {/* ---- Header row ---- */}
+    <section className={`px-10 py-16 transition-colors duration-300 ${theme.section}`}>
       <div className="flex items-end justify-between mb-10">
         <div>
-          <p className={eyebrowClass}>Curated Selections</p>
-          <h2 className="font-serif text-4xl font-bold">Trending Collections</h2>
+          <p className={`text-[10px] tracking-[0.2em] uppercase mb-2 ${theme.eyebrow}`}>
+            Live Feed
+          </p>
+          <h2 className="font-serif text-4xl font-bold">New Discoveries</h2>
         </div>
-        <button className={viewAllClass}>View All</button>
+        <button className={`text-[11px] tracking-[0.2em] uppercase font-medium border-b pb-0.5 hover:opacity-60 ${theme.button}`}>
+          Refresh Gallery
+        </button>
       </div>
 
-      {/* Error fallback */}
-      {error ? (
-        <p className="text-center text-red-400 mb-8">{error}</p>
-      ) : null}
+      {loading && <p className="text-center opacity-50">Curating images...</p>}
+      {error && <p className="text-center text-red-400">{error}</p>}
 
-      {/* ---- 3-column staggered grid ---- */}
       <div className="grid grid-cols-3 gap-6 items-start">
-        {items.map(function (col, i) {
-          return (
-            <CollectionCard key={col.id} col={col} index={i} dark={dark} />
-          );
-        })}
+        {collections.map((item, i) => (
+          <CollectionCard 
+            key={item.id} 
+            item={item} 
+            index={i} 
+            isDark={dark} 
+          />
+        ))}
       </div>
-
     </section>
   );
 }

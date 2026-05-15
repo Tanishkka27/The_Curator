@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-
-const UNSPLASH_KEY = "0tYUshO3KokmKsm_pmu1SW5-U9A-H7N8Z9kEI0kT2eI";
+const key=import.meta.env.VITE_UNSPLASH_ACCESS_KEY
 
 const stats = [
   { label: "Curated Pieces", value: "1,280" },
@@ -164,12 +163,13 @@ export default function ArtistHero({ dark }) {
   useEffect(function () {
     async function fetchHeroPhoto() {
       // One photo of a person in a creative/studio setting
-      const url = "https://api.unsplash.com/photos/random?query=creative+director+studio&count=1&client_id=" + UNSPLASH_KEY;
+      const url = "https://api.unsplash.com/photos/random?query=creative+director+studio&count=1&client_id=" + key;
 
       const response = await fetch(url);
 
       if (response.ok === false) {
-        setError("Could not load hero photo.");
+        console.warn("Unsplash API rate limit reached. Using fallback images.");
+        setPortraitUrl("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop");
         return;
       }
 

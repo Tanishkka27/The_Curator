@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
-const UNSPLASH_KEY = "0tYUshO3KokmKsm_pmu1SW5-U9A-H7N8Z9kEI0kT2eI";
+import { useNavigate } from "react-router-dom";
+const key=import.meta.env.VITE_UNSPLASH_ACCESS_KEY
 
 
 const artists = [
@@ -19,7 +19,8 @@ const artists = [
 ];
 
 
-function ArtistButtons({ dark }) {
+function ArtistButtons({ dark, artistId }) {
+  const navigate = useNavigate();
   let primaryClass = "px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase font-medium transition-opacity hover:opacity-80 ";
   if (dark) {
     primaryClass += "bg-[#f0ede6] text-[#0c3028]";
@@ -36,7 +37,7 @@ function ArtistButtons({ dark }) {
 
   return (
     <div className="flex items-center gap-3 mt-5">
-      <button className={primaryClass}>Portfolio</button>
+      <button onClick={() => navigate(`/artist/${artistId}`)} className={primaryClass}>Portfolio</button>
       <button className={secondaryClass}>Follow</button>
     </div>
   );
@@ -46,7 +47,7 @@ function ArtistButtons({ dark }) {
 function ArtistCard({ artist, dark }) {
   let cardClass = "flex gap-6 p-6 border transition-colors duration-300 ";
   if (dark) {
-    cardClass += "border-[#f0ede6]/10 bg-[#0c3028]";
+    cardClass += "border-[#f0ede6]/10 bg-[#0b2f2f]";
   } else {
     cardClass += "border-[#1a1a1a]/10 bg-[#f0ede8]";
   }
@@ -78,7 +79,7 @@ function ArtistCard({ artist, dark }) {
           <h3 className="font-serif text-3xl font-bold mb-3">{artist.name}</h3>
           <p className={bioClass}>{artist.bio}</p>
         </div>
-        <ArtistButtons dark={dark} />
+        <ArtistButtons dark={dark} artistId={artist.id} />
       </div>
     </div>
   );
@@ -91,18 +92,25 @@ export default function FeaturedArtists({ dark }) {
   useEffect(function () {
     async function fetchPortraits() {
       // "portrait studio photography" gives us clean artist-style photos
-      const url = "https://api.unsplash.com/photos/random?query=portrait+studio+photography&count=2&client_id=" + UNSPLASH_KEY;
+      const url = "https://api.unsplash.com/photos/random?query=portrait+studio+photography&count=2&client_id=" + key;
 
       const response = await fetch(url);
 
       if (response.ok === false) {
-        setError("Could not load artist photos. Check your Unsplash API key.");
+        console.warn("Unsplash API rate limit reached. Using fallback images.");
+        setItems(prevItems => prevItems.map(function (artist, index) {
+          const updatedArtist = { ...artist };
+          updatedArtist.imageUrl = index === 0 
+            ? "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=400&auto=format&fit=crop"
+            : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop";
+          return updatedArtist;
+        }));
         return;
       }
 
       const data = await response.json();
 
-      const updated = items.map(function (artist, index) {
+      setItems(prevItems => prevItems.map(function (artist, index) {
         const updatedArtist = {};
         updatedArtist.id = artist.id;
         updatedArtist.name = artist.name;
@@ -111,13 +119,10 @@ export default function FeaturedArtists({ dark }) {
 
         if (data[index]) {
           updatedArtist.imageUrl = data[index].urls.small;
-          // using "small" here since the portrait box is not that big
         }
 
         return updatedArtist;
-      });
-
-      setItems(updated);
+      }));
     }
 
     fetchPortraits();

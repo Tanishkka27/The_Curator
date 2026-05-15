@@ -1,5 +1,5 @@
 import { Moon, Sun } from "lucide-react";
-
+import { Link } from "react-router-dom";
 const navLinks = ["Gallery", "Designers", "About"];
 
 
@@ -20,10 +20,12 @@ function NavLink({ item, dark }) {
     linkClass += "opacity-60 hover:opacity-100";
   }
 
+  const path = item === "Gallery" ? "/" : `/${item.toLowerCase()}`;
+
   return (
-    <a key={item} href="#" className={linkClass}>
+    <Link key={item} to={path} className={linkClass}>
       {item}
-    </a>
+    </Link>
   );
 }
 
@@ -33,7 +35,7 @@ export default function Navbar({ dark, toggleDark }) {
   // Nav background and text flip with dark mode
   let navClass = "flex items-center justify-between px-10 py-5 sticky top-0 z-50 transition-colors duration-300 ";
   if (dark) {
-    navClass += "bg-[#0c3028] text-[#f0ede6]";
+    navClass += "bg-[#070808] text-[#f0ede6]";
   } else {
     navClass += "bg-[#f0ede8] text-[#1a1a1a]";
   }
