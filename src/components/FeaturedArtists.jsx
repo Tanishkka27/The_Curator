@@ -61,7 +61,6 @@ function ArtistCard({ artist, dark }) {
 
   return (
     <div className={cardClass}>
-      {/* Portrait — real image if loaded, shimmer placeholder otherwise */}
       <div className={`w-[180px] h-[200px] flex-shrink-0 overflow-hidden ${artist.bg}`}>
         {artist.imageUrl ? (
           <img
@@ -91,7 +90,6 @@ export default function FeaturedArtists({ dark }) {
 
   useEffect(function () {
     async function fetchPortraits() {
-      // "portrait studio photography" gives us clean artist-style photos
       const url = "https://api.unsplash.com/photos/random?query=portrait+studio+photography&count=2&client_id=" + key;
 
       const response = await fetch(url);
