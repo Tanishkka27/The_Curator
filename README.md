@@ -33,34 +33,8 @@ It has a light mode and a dark mode, a filterable masonry grid, trending collect
 | Framework  | React (Vite)         |
 | Styling    | Tailwind CSS         |
 | Icons      | Lucide React         |
-| Fonts      | Serif + system       |
-| Images     | Unsplash API         |
 | Deployment | Vercel / Netlify     |
 
-
----
-
-## Folder Structure
-
-```
->>>>>>> d10fbcb (API Fetched successfully)
-the-curator/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx              # Logo + dark mode toggle
-│   │   ├── Hero.jsx                # Top headline section
-│   │   ├── FilterTabs.jsx          # All / Photography / Design / Illustration
-│   │   ├── PermanentCollection.jsx # Masonry grid — fetches 16 images
-│   │   ├── TrendingCollections.jsx # 3-col cards — fetches 3 cover images
-│   │   ├── FeaturedArtists.jsx     # Artist cards — fetches 2 portrait photos
-│   │   └── ArtistHero.jsx          # Big profile section — fetches 1 hero photo
-│   ├── App.jsx                     # Root — holds dark mode state, renders all sections
-│   └── main.jsx                    # Entry point
-├── package.json
-└── README.md
-```
 
 ---
 
@@ -89,22 +63,6 @@ The app pulls all photos from [Unsplash](https://unsplash.com/developers), which
 
 ### Step 2 — Add it to the components
 
-Open each of these four files and find this line at the top:
-
-```js
-const UNSPLASH_KEY = "YOUR_UNSPLASH_ACCESS_KEY";
-```
-
-- `PermanentCollection.jsx`
-- `TrendingCollections.jsx`
-- `FeaturedArtists.jsx`
-- `ArtistHero.jsx`
-
-### Step 3 — Done
-
-Save and refresh. Images will now load from Unsplash automatically.
-
----
 
 ## How the Image Fetching Works (Simple Explanation)
 
