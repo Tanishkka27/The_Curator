@@ -1,109 +1,172 @@
-# The Curator — High-End Portfolio & Gallery Engine
 
-A professional portfolio platform built for photographers and designers who refuse to be ordinary.
+# The Curator
 
----
-
-## Project Overview
-
-**The Curator** is a premium, visually immersive portfolio/gallery web application designed specifically for creative professionals like photographers, graphic designers, illustrators, and digital artists. Think Pinterest, but stripped of clutter and rebuilt with intention for serious creators.
-
-The platform focuses entirely on **how work is presented**, treating every image as a piece in a gallery and not just a thumbnail in a feed.
+A high-end gallery and portfolio platform for photographers, designers, and illustrators who take their craft seriously.
 
 ---
 
-## Core Features
+## What Is This?
 
-### Masonry Grid Layout
-- Implemented using [`react-masonry-css`](https://www.npmjs.com/package/react-masonry-css)
-- The grid **intelligently reorganizes itself** as the browser window is resized
-- Different column counts at different breakpoints (mobile → tablet → desktop)
-- Images maintain their natural aspect ratios — no cropping, no distortion
+The Curator is a clean, minimal gallery web app built for creative professionals. Think of it as a curated art exhibition — not a chaotic image dump. Every piece gets the space and attention it deserves.
 
-### Light / Dark Mode Toggle
-- A seamless **sunset-inspired transition** between light and dark themes
-- CSS custom properties (`--color-bg`, `--color-text`, etc.) power the entire theme system
-- Smooth animated transition using `transition: all 0.6s ease`
+It has a light mode and a dark mode, a filterable masonry grid, trending collections, featured artists, and an artist profile hero — all in one scroll.
 
-### Category Filtering
-- Filter gallery by: **Photography / Design / Illustration / All**
-- Smooth re-layout animation when switching filters
+---
 
-### Unsplash API Integration
-- Fetches **high-resolution, professional imagery** via the [Unsplash API](https://unsplash.com/developers)
-- Images are always premium quality — the platform always looks polished
-- Search functionality to pull images by keyword/topic
+## Features
 
-### Lightbox Preview
-- Click any image to open a full-screen lightbox view
-- Shows image metadata: photographer name, resolution, tags
+- **Light / Dark Mode** — toggle with one click, smooth transition across every section
+- **Masonry Grid** — images stack naturally without cropping, using CSS columns
+- **Category Filter** — switch between Architecture, Atmosphere, or view all
+- **Trending Collections** — staggered 3-column layout with hover zoom
+- **Featured Artists** — side-by-side cards with portrait + bio + CTA buttons
+- **Artist Hero** — big featured profile with stats, bio, and action buttons
+- **Real Images via API** — photos fetched live from Unsplash on page load
+>>>>>>> d10fbcb (API Fetched successfully)
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend Framework | React.js (Vite) |
-| Masonry Layout | `react-masonry-css` |
-| Styling | CSS Modules + CSS Custom Properties |
-| API | Unsplash API (free tier) |
-| Routing | React Router DOM |
-| Icons | Lucide React |
-| Deployment | Vercel / Netlify |
+| What       | How                  |
+|------------|----------------------|
+| Framework  | React (Vite)         |
+| Styling    | Tailwind CSS         |
+| Icons      | Lucide React         |
+| Fonts      | Serif + system       |
+| Images     | Unsplash API         |
+| Deployment | Vercel / Netlify     |
+
+No extra libraries. No Redux. No routing. Just React + Tailwind + Fetch API.
 
 ---
 
-## Project Structure
+## Folder Structure
+
+```
+>>>>>>> d10fbcb (API Fetched successfully)
 the-curator/
 ├── public/
 │   └── favicon.svg
 ├── src/
 │   ├── components/
-│   │   ├── Navbar.jsx          # Top bar with logo + dark mode toggle
-│   │   ├── MasonryGrid.jsx     # Core masonry layout using react-masonry-css
-│   │   ├── ImageCard.jsx       # Individual image card with hover effects
-│   │   ├── Lightbox.jsx        # Full-screen image preview
-│   │   └── FilterBar.jsx       # Category filter buttons
-│   ├── hooks/
-│   │   └── useUnsplash.js      # Custom hook for Unsplash API calls
-│   ├── context/
-│   │   └── ThemeContext.jsx    # Light/Dark mode state management
-│   ├── styles/
-│   │   ├── globals.css         # CSS variables, resets, theme tokens
-│   │   └── masonry.css         # Masonry column styles
-│   ├── App.jsx
-│   └── main.jsx
-├── .env.example
-├── .gitignore
+│   │   ├── Navbar.jsx              # Logo + dark mode toggle
+│   │   ├── Hero.jsx                # Top headline section
+│   │   ├── FilterTabs.jsx          # All / Photography / Design / Illustration
+│   │   ├── PermanentCollection.jsx # Masonry grid — fetches 16 images
+│   │   ├── TrendingCollections.jsx # 3-col cards — fetches 3 cover images
+│   │   ├── FeaturedArtists.jsx     # Artist cards — fetches 2 portrait photos
+│   │   └── ArtistHero.jsx          # Big profile section — fetches 1 hero photo
+│   ├── App.jsx                     # Root — holds dark mode state, renders all sections
+│   └── main.jsx                    # Entry point
 ├── package.json
 └── README.md
+```
 
 ---
 
-## Team Members
+## How to Run
 
-| Name |
-|----------------------|
-| [Member 1 Tanishkka] |
-| [Member 2 Kunal Agarwal] |
-| [Member 3 Gautam Bhardwaj] |
+```bash
+npm install
+npm run dev
+```
 
----
-
-## Project Timeline
-
-| Project setup, Vite + React, Unsplash API integration |
-| Masonry grid layout, Image cards, Responsive design |
-| Light/Dark mode, Lightbox, Filter system |
-| Polish, deployment on Vercel, final testing |
+Open `http://localhost:5173` and you're good.
 
 ---
 
-## Live Demo
+## Setting Up the Unsplash API (Required for Images)
 
-> Coming soon — will be deployed on Vercel
+The app pulls all photos from [Unsplash](https://unsplash.com/developers), which is free.
+
+### Step 1 — Get your API key
+
+1. Go to [https://unsplash.com/developers](https://unsplash.com/developers)
+2. Click **"Register as a developer"** and sign up (free)
+3. Click **"New Application"**
+4. Fill in the form (app name, description — anything works)
+5. Scroll down and copy your **Access Key**
+
+### Step 2 — Add it to the components
+
+Open each of these four files and find this line at the top:
+
+```js
+const UNSPLASH_KEY = "YOUR_UNSPLASH_ACCESS_KEY";
+```
+
+Replace `YOUR_UNSPLASH_ACCESS_KEY` with the key you copied. You need to do this in:
+
+- `PermanentCollection.jsx`
+- `TrendingCollections.jsx`
+- `FeaturedArtists.jsx`
+- `ArtistHero.jsx`
+
+### Step 3 — Done
+
+Save and refresh. Images will now load from Unsplash automatically.
+
+> **Note:** The free Unsplash plan allows 50 requests per hour, which is more than enough for development and demo use.
+
+---
+
+## How the Image Fetching Works (Simple Explanation)
+
+Each component that needs images does the same three steps:
+
+```
+1. Component loads on screen
+       ↓
+2. useEffect runs → fetch() sends a request to Unsplash
+       ↓
+3. We get back an array of photo objects → we attach the URLs to our items → React re-renders with real images
+```
+
+While the fetch is happening, each card shows a light grey shimmer (via `animate-pulse`) so the layout doesn't jump around.
+
+If the API key is wrong or the request fails, an error message appears in place of the images.
+
+---
+
+## How Dark Mode Works
+
+Dark mode state lives in `App.jsx`. It passes a `dark` prop down to every component. Each component uses it to swap Tailwind classes between light and dark values.
+
+```jsx
+// In App.jsx
+const [dark, setDark] = useState(false);
+
+// Passed to every component
+<Navbar dark={dark} toggleDark={() => setDark(!dark)} />
+<Hero dark={dark} />
+// ...and so on
+```
+
+No CSS variables needed — it's all just conditional Tailwind classes.
+
+---
+
+## Team
+
+| Name              |
+|-------------------|
+| Tanishkka         |
+| Kunal Agarwal     |
+| Gautam Bhardwaj   |
+
+---
+
+## Timeline
+
+| Week | Work                                                        |
+|------|-------------------------------------------------------------|
+| 1    | Project setup, Vite + React, component scaffolding          |
+| 2    | Masonry grid, image cards, responsive layout                |
+| 3    | Dark mode, filters, collections + artist sections           |
+| 4    | Unsplash API integration, loading states, polish, deploy    |
 
 ---
 
 *Built for WAP Capstone Project*
+>>>>>>> d10fbcb (API Fetched successfully)
